@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>SPY</title>
+</head>
+<!-- Quang's SPY desk — adjusted version
+     Kept from your file: AMEX:SPY, 5-min default, dark theme, America/Chicago.
+     Added: SMA 20 + SMA 50 (your break rule needs SMA 20), VIX panel,
+     toolbar + symbol change on (flip 2m / 15m / 1h without editing code).
+     By hand once: draw Fib retracement 726.79 (Wed Nov 18 low) -> 763.03
+     (Nov 12 high). Levels: 78.6% 734.55 / 61.8% 740.63 / 50% 744.91 /
+     38.2% 749.19 / 23.6% 754.48. Prev close (Wed): 730.20.
+     Volume profile (POC/VAH/VAL) is a paid TradingView study — the free
+     embed cannot add it from code. -->
+<body style="margin:0;height:100vh;background:#000;display:flex;flex-direction:column">
+  <div id="tv_spy" style="flex:1"></div>
+  <div id="tv_vix" style="height:22%"></div>
+  <script src="https://s3.tradingview.com/tv.js"></script>
+  <script>
+    var STUDIES = [
+      "VWAP@tv-basicstudies",                                   // session VWAP, anchored at the 9:30 AM ET open
+      { id: "MASimple@tv-basicstudies", inputs: { length: 20 } }, // SMA 20 — break-rule line
+      { id: "MASimple@tv-basicstudies", inputs: { length: 50 } }, // SMA 50
+      { id: "MAExp@tv-basicstudies",    inputs: { length: 9 } }   // EMA 9 — your VWAP + EMA style
+    ];
+
+    function makeChart(id, symbol, interval, studies) {
+      new TradingView.widget({
+        container_id: id,
+        symbol: symbol,
+        interval: interval,
+        theme: "dark",
+        style: "1",
+        locale: "en",
+        autosize: true,
+        timezone: "America/Chicago",
+        hide_side_toolbar: false,
+        allow_symbol_change: true,
+        studies: studies
+      });
+    }
+
+    makeChart("tv_spy", "AMEX:SPY", "5", STUDIES);
+    makeChart("tv_vix", "CBOE:VIX", "5", []);
+  </script>
+</body>
+</html>
+Sent
+Compose
+Write to Justine Hoang
+
+
