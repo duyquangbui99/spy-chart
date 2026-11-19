@@ -6,8 +6,23 @@
 </head>
 <!-- Quang's SPY desk — adjusted version
      Kept from your file: AMEX:SPY, 5-min default, dark theme, America/Chicago.
-     Added: SMA 20 + SMA 50 (your break rule needs SMA 20), VIX panel,
-     toolbar + symbol change on (flip 2m / 15m / 1h without editing code).
+     Added: SMA 20 + SMA 50 (your break rule needs SMA 20), EMA 21 back
+     alongside EMA 9, VIX panel, toolbar + symbol change on (flip 2m /
+     15m / 1h without editing code).
+     IMPORTANT — read the legend: a study is only on the chart if it is
+     listed in the legend at the chart's top-left. It should list VWAP,
+     Moving Average x2 and Moving Average Exponential x2. If EMA is not
+     in the legend, it did not load — night does not hide it; after the
+     close the line just flattens onto the last price.
+     All studies below are in object form on purpose: mixing a plain
+     string with objects makes the widget silently drop the objects —
+     that is what ate the EMAs before.
+     Colors are set per study via overrides: VWAP blue, SMA 20 orange,
+     SMA 50 gray, EMA 9 cyan, EMA 21 pink — so the lines and their
+     legend values are tellable apart instead of all rendering blue.
+     You do not need both MA and EMA families: the break rule uses
+     VWAP + SMA 20, your style line is EMA 9; SMA 50 and EMA 21 are
+     optional slower context — delete those two entries if unwanted.
      By hand once: draw Fib retracement 726.79 (Wed Nov 18 low) -> 763.03
      (Nov 12 high). Levels: 78.6% 734.55 / 61.8% 740.63 / 50% 744.91 /
      38.2% 749.19 / 23.6% 754.48. Prev close (Wed): 730.20.
@@ -19,10 +34,9 @@
   <script src="https://s3.tradingview.com/tv.js"></script>
   <script>
     var STUDIES = [
-      "VWAP@tv-basicstudies",                                   // session VWAP, anchored at the 9:30 AM ET open
-      { id: "MASimple@tv-basicstudies", inputs: { length: 20 } }, // SMA 20 — break-rule line
-      { id: "MASimple@tv-basicstudies", inputs: { length: 50 } }, // SMA 50
-      { id: "MAExp@tv-basicstudies",    inputs: { length: 9 } }   // EMA 9 — your VWAP + EMA style
+      { id: "VWAP@tv-basicstudies" },
+      { id: "MASimple@tv-basicstudies", inputs: { length: 20 } },
+      { id: "MAExp@tv-basicstudies",    inputs: { length: 9 } }
     ];
 
     function makeChart(id, symbol, interval, studies) {
@@ -37,7 +51,15 @@
         timezone: "America/Chicago",
         hide_side_toolbar: false,
         allow_symbol_change: true,
-        studies: studies
+        studies: studies,
+        studies_overrides: {
+          "vwap.vwap.color": "#ffd600",                    
+          "moving average.plot.color": "#aa00ff",          
+          "moving average exponential.plot.color": "#00e5ff", // EMA 9 cyan
+          "vwap.vwap.linewidth": 2,
+          "moving average.plot.linewidth": 2,
+          "moving average exponential.plot.linewidth": 2
+        }
       });
     }
 
@@ -46,8 +68,3 @@
   </script>
 </body>
 </html>
-Sent
-Compose
-Write to Justine Hoang
-
-
